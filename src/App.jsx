@@ -552,12 +552,6 @@ function App() {
         </div>
       </footer>
 
-      {/* ===== WHATSAPP STICKY (MOBILE) ===== */}
-      <div className="whatsapp-sticky">
-        <a href={WHATSAPP_LINK} target="_blank" rel="noopener noreferrer" className="btn btn-whatsapp">
-          <WhatsAppIcon /> Cotizar por WhatsApp
-        </a>
-      </div>
     </>
   )
 }
