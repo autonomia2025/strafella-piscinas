@@ -337,7 +337,7 @@ button {
   right: 0;
   bottom: 0;
   background: var(--white);
-  z-index: 999;
+  z-index: 1005;
   flex-direction: column;
   padding: 80px 24px 24px;
 }
@@ -525,7 +525,7 @@ button {
   background: var(--white);
   border: 1px solid var(--gray-200);
   border-radius: var(--radius-lg);
-  padding: 32px;
+  padding: 24px;
   transition: all var(--transition-base);
   position: relative;
   overflow: hidden;
@@ -626,7 +626,7 @@ button {
 
 .why-card {
   text-align: center;
-  padding: 36px 24px;
+  padding: 24px 20px;
   background: var(--white);
   border: 1px solid var(--gray-200);
   border-radius: var(--radius-lg);
@@ -778,7 +778,7 @@ button {
 .trust-card {
   background: linear-gradient(135deg, var(--pool-deep), var(--pool-dark));
   border-radius: var(--radius-lg);
-  padding: 32px 24px;
+  padding: 24px 20px;
   text-align: center;
   color: var(--white);
   transition: all var(--transition-base);
@@ -875,10 +875,48 @@ button {
 }
 
 /* ===== TESTIMONIALS ===== */
-.testimonials-carousel {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 24px;
+/* ===== TESTIMONIALS CAROUSEL ===== */
+.testimonial-carousel-container {
+  overflow: hidden;
+  position: relative;
+  padding-bottom: 40px;
+}
+
+.testimonial-cards-wrapper {
+  display: flex;
+  transition: transform 0.6s cubic-bezier(0.25, 1, 0.5, 1);
+}
+
+.testimonial-slide {
+  min-width: 100%;
+  padding: 0 12px;
+}
+
+.testimonial-dots {
+  display: flex;
+  justify-content: center;
+  gap: 8px;
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+}
+
+.testimonial-dots .dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: var(--gray-300);
+  border: none;
+  cursor: pointer;
+  transition: all var(--transition-fast);
+  padding: 0;
+}
+
+.testimonial-dots .dot.active {
+  background: var(--pool-primary);
+  width: 24px;
+  border-radius: 10px;
 }
 
 .testimonial-card {
@@ -959,10 +997,47 @@ button {
   color: rgba(255, 255, 255, 0.7);
 }
 
-.coverage-grid {
-  display: grid;
-  grid-template-columns: repeat(5, 1fr);
+.coverage-marquee-container {
+  overflow: hidden;
+  width: 100%;
+  display: flex;
+  padding: 10px 0;
+  position: relative;
+}
+
+.coverage-marquee-container::before,
+.coverage-marquee-container::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  width: 60px;
+  z-index: 2;
+  pointer-events: none;
+}
+.coverage-marquee-container::before {
+  left: 0;
+  background: linear-gradient(to right, var(--pool-deep), transparent);
+}
+.coverage-marquee-container::after {
+  right: 0;
+  background: linear-gradient(to left, var(--pool-deep), transparent);
+}
+
+.coverage-marquee {
+  display: flex;
   gap: 16px;
+  animation: marquee 30s linear infinite;
+  white-space: nowrap;
+}
+
+.coverage-marquee:hover {
+  animation-play-state: paused;
+}
+
+@keyframes marquee {
+  0% { transform: translateX(0); }
+  100% { transform: translateX(-50%); } 
 }
 
 .coverage-item {
@@ -1176,14 +1251,6 @@ button {
   .coverage-grid {
     grid-template-columns: repeat(3, 1fr);
   }
-
-  .testimonials-carousel {
-    grid-template-columns: repeat(2, 1fr);
-  }
-
-  .testimonials-carousel .testimonial-card:last-child {
-    display: none;
-  }
 }
 
 @media (max-width: 768px) {
@@ -1243,13 +1310,8 @@ button {
   .services-grid,
   .why-grid,
   .trust-grid,
-  .steps-container,
-  .testimonials-carousel {
+  .steps-container {
     grid-template-columns: 1fr;
-  }
-
-  .testimonials-carousel .testimonial-card:last-child {
-    display: block;
   }
 
   .steps-container::before {

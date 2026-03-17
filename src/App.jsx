@@ -55,7 +55,14 @@ const WHATSAPP_LINK = 'https://wa.me/56947976450?text=Hola%2C%20necesito%20servi
 function App() {
   const [scrolled, setScrolled] = useState(false)
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
+  const [activeTestimonial, setActiveTestimonial] = useState(0)
   const sectionRefs = useRef([])
+
+  const testimonials = [
+    { text: '"Mi piscina estaba completamente verde y la recuperaron en pocos días."', name: 'Cliente', location: 'Viña del Mar', initial: 'V' },
+    { text: '"Servicio muy profesional, ahora hacen el mantenimiento de forma periódica."', name: 'Cliente', location: 'Concón', initial: 'C' },
+    { text: '"Instalaron la bomba nueva y dejaron todo funcionando perfecto."', name: 'Cliente', location: 'Reñaca', initial: 'R' },
+  ]
 
   useEffect(() => {
     const handleScroll = () => {
@@ -64,6 +71,13 @@ function App() {
     window.addEventListener('scroll', handleScroll)
     return () => window.removeEventListener('scroll', handleScroll)
   }, [])
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setActiveTestimonial((prev) => (prev + 1) % testimonials.length)
+    }, 5000)
+    return () => clearInterval(interval)
+  }, [testimonials.length])
 
   // Intersection Observer for animations
   useEffect(() => {
@@ -449,41 +463,36 @@ function App() {
             </p>
           </div>
 
-          <div className="testimonials-carousel">
-            {[
-              {
-                text: '"Mi piscina estaba completamente verde y la recuperaron en pocos días."',
-                name: 'Cliente',
-                location: 'Viña del Mar',
-                initial: 'V',
-              },
-              {
-                text: '"Servicio muy profesional, ahora hacen el mantenimiento de forma periódica."',
-                name: 'Cliente',
-                location: 'Concón',
-                initial: 'C',
-              },
-              {
-                text: '"Instalaron la bomba nueva y dejaron todo funcionando perfecto."',
-                name: 'Cliente',
-                location: 'Reñaca',
-                initial: 'R',
-              },
-            ].map((t, i) => (
-              <div className="testimonial-card fade-in-up" key={i} style={{ transitionDelay: `${i * 100}ms` }}>
-                <div className="testimonial-stars">
-                  {'★★★★★'.split('').map((s, j) => <span key={j}>{s}</span>)}
-                </div>
-                <blockquote>{t.text}</blockquote>
-                <div className="testimonial-author">
-                  <div className="author-avatar">{t.initial}</div>
-                  <div className="author-info">
-                    <div className="name">{t.name}</div>
-                    <div className="location">{t.location}</div>
+          <div className="testimonial-carousel-container fade-in-up">
+            <div className="testimonial-cards-wrapper" style={{ transform: `translateX(-${activeTestimonial * 100}%)` }}>
+              {testimonials.map((t, i) => (
+                <div className="testimonial-slide" key={i}>
+                  <div className="testimonial-card">
+                    <div className="testimonial-stars">
+                      {'★★★★★'.split('').map((s, j) => <span key={j}>{s}</span>)}
+                    </div>
+                    <blockquote>{t.text}</blockquote>
+                    <div className="testimonial-author">
+                      <div className="author-avatar">{t.initial}</div>
+                      <div className="author-info">
+                        <div className="name">{t.name}</div>
+                        <div className="location">{t.location}</div>
+                      </div>
+                    </div>
                   </div>
                 </div>
-              </div>
-            ))}
+              ))}
+            </div>
+            <div className="testimonial-dots">
+              {testimonials.map((_, i) => (
+                <button 
+                  key={i} 
+                  className={`dot ${i === activeTestimonial ? 'active' : ''}`}
+                  onClick={() => setActiveTestimonial(i)}
+                  aria-label={`Ver testimonio ${i + 1}`}
+                />
+              ))}
+            </div>
           </div>
         </div>
       </section>
@@ -499,16 +508,21 @@ function App() {
             </p>
           </div>
 
-          <div className="coverage-grid">
-            {[
-              'Viña del Mar', 'Valparaíso', 'Reñaca', 'Concón', 'Mantagua',
-              'Quilpué', 'Villa Alemana', 'Peñablanca', 'Casablanca', 'Región de Valparaíso'
-            ].map((zone, i) => (
-              <div className="coverage-item fade-in-up" key={i} style={{ transitionDelay: `${i * 60}ms` }}>
-                <span className="coverage-icon"><MapPinIcon /></span>
-                {zone}
-              </div>
-            ))}
+          <div className="coverage-marquee-container fade-in-up">
+            <div className="coverage-marquee">
+              {[
+                'Viña del Mar', 'Valparaíso', 'Reñaca', 'Concón', 'Mantagua',
+                'Quilpué', 'Villa Alemana', 'Peñablanca', 'Casablanca', 'Región de Valparaíso',
+                // Copia exacta para lograr el loop continuo:
+                'Viña del Mar', 'Valparaíso', 'Reñaca', 'Concón', 'Mantagua',
+                'Quilpué', 'Villa Alemana', 'Peñablanca', 'Casablanca', 'Región de Valparaíso'
+              ].map((zone, i) => (
+                <div className="coverage-item" key={i}>
+                  <span className="coverage-icon"><MapPinIcon /></span>
+                  {zone}
+                </div>
+              ))}
+            </div>
           </div>
         </div>
       </section>
